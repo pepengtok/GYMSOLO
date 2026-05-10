@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+*.iml
+
+# Local / secrets (Android)
+**/local.properties
+
+# Editor
+*.swp
+*.swo
+*~
