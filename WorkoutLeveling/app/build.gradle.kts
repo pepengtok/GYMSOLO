@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.workoutleveling.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.workoutleveling.app"
@@ -54,5 +54,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.health.connect)
+    implementation(libs.androidx.work.runtime.ktx)
+    testImplementation("junit:junit:4.13.2")
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

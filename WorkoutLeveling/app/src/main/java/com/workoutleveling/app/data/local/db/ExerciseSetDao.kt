@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseSetDao {
+    @Query("SELECT * FROM exercise_sets")
+    fun observeAll(): Flow<List<ExerciseSetEntity>>
+
     @Query("SELECT * FROM exercise_sets WHERE sessionId = :sessionId ORDER BY exerciseName, setIndex")
     fun observeForSession(sessionId: Long): Flow<List<ExerciseSetEntity>>
 
@@ -35,4 +38,15 @@ interface ExerciseSetDao {
         """,
     )
     suspend fun getLatestSetForExerciseName(exerciseName: String): ExerciseSetEntity?
+
+    @Query(
+        """
+        SELECT es.* FROM exercise_sets es
+        INNER JOIN workout_sessions ws ON ws.id = es.sessionId
+        WHERE es.exerciseName = :exerciseName COLLATE NOCASE
+        ORDER BY ws.startedAtEpochMs DESC, es.setIndex DESC
+        LIMIT 2
+        """,
+    )
+    suspend fun getLatestTwoSetsForExerciseName(exerciseName: String): List<ExerciseSetEntity>
 }

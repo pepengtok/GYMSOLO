@@ -9,12 +9,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.workoutleveling.app.ui.bodycheckin.BodyCheckInViewModel
 import com.workoutleveling.app.ui.baseline.BaselineViewModel
+import com.workoutleveling.app.ui.catalog.CustomCatalogViewModel
 import com.workoutleveling.app.ui.home.HomeViewModel
 import com.workoutleveling.app.ui.navigation.Routes
 import com.workoutleveling.app.ui.progress.ProgressViewModel
 import com.workoutleveling.app.ui.session.SessionViewModel
 import com.workoutleveling.app.ui.screens.BaselineScreen
+import com.workoutleveling.app.ui.screens.BodyCheckInScreen
+import com.workoutleveling.app.ui.screens.CustomCatalogScreen
 import com.workoutleveling.app.ui.screens.HomeScreen
 import com.workoutleveling.app.ui.screens.ProgressScreen
 import com.workoutleveling.app.ui.screens.SessionScreen
@@ -38,6 +42,7 @@ fun WorkoutLevelingAppRoot(modifier: Modifier = Modifier) {
                 onEnterGate = { navController.navigate(Routes.Session) },
                 onOpenProgress = { navController.navigate(Routes.Progress) },
                 onOpenBaseline = { navController.navigate(Routes.Baseline) },
+                onOpenBodyCheckIn = { navController.navigate(Routes.BodyCheckIn) },
             )
         }
         composable(Routes.Session) {
@@ -58,6 +63,18 @@ fun WorkoutLevelingAppRoot(modifier: Modifier = Modifier) {
             ProgressScreen(
                 viewModel = vm,
                 onBack = { navController.popBackStack() },
+                onOpenBodyCheckIn = { navController.navigate(Routes.BodyCheckIn) },
+                onOpenCustomCatalog = { navController.navigate(Routes.CustomCatalog) },
+            )
+        }
+        composable(Routes.CustomCatalog) {
+            val app = LocalContext.current.applicationContext as Application
+            val vm: CustomCatalogViewModel = viewModel(
+                factory = ViewModelProvider.AndroidViewModelFactory.getInstance(app),
+            )
+            CustomCatalogScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
             )
         }
         composable(Routes.Baseline) {
@@ -68,6 +85,16 @@ fun WorkoutLevelingAppRoot(modifier: Modifier = Modifier) {
             BaselineScreen(
                 viewModel = vm,
                 onDone = { navController.popBackStack() },
+            )
+        }
+        composable(Routes.BodyCheckIn) {
+            val app = LocalContext.current.applicationContext as Application
+            val vm: BodyCheckInViewModel = viewModel(
+                factory = ViewModelProvider.AndroidViewModelFactory.getInstance(app),
+            )
+            BodyCheckInScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
             )
         }
     }

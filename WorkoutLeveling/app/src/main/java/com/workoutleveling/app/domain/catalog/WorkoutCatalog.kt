@@ -11,8 +11,21 @@ data class CatalogExercise(
     val displayName: String,
     val suggestedReps: String? = null,
     val info: String,
+    val tutorialVideoAssetPath: String? = null,
+    val tutorialVideoUrl: String? = null,
+    // Opsional: taruh file di assets/image/tutorial/ (format png/jpg), lalu isi path-nya.
+    val tutorialImageAssetPath: String? = null,
     val dos: List<String> = emptyList(),
     val donts: List<String> = emptyList(),
+    /** Stasiun kabel/mesin Tunturi HG60 (untuk filter saran nama latihan). */
+    val isHg60Station: Boolean = false,
+)
+
+data class TutorialCoverageItem(
+    val exerciseName: String,
+    val expectedImageAssets: List<String>,
+    val expectedVideoAssets: List<String>,
+    val hasVideoFallback: Boolean,
 )
 
 object WorkoutCatalog {
@@ -22,6 +35,7 @@ object WorkoutCatalog {
             displayName = "Chest press (mesin HG60)",
             suggestedReps = "10",
             info = "Otot: dada, triceps, bahu depan. Memperkuat dorongan horizontal & membantu aktivitas sehari-hari (dorong pintu, angkat barang).",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=machine+chest+press+proper+form",
             dos = listOf(
                 "Sandaran punggung menempel stabil; kaki menapak.",
                 "Kontrol turun 2–3 detik, dorong tanpa loncat momentum.",
@@ -32,11 +46,13 @@ object WorkoutCatalog {
                 "Mengunci siku kaku atau memaksa rentang jika bahu/siku nyeri.",
                 "Melepas napas terus-menerus saat dorong berat.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Lat pulldown (high pulley HG60)",
             suggestedReps = "10",
             info = "Otot: latissimus, punggung atas. Memperkuat tarikan & postur bahu; membantu menyeimbangkan otot dada.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=lat+pulldown+proper+form",
             dos = listOf(
                 "Dada sedikit angkat, dada ringan ke arah bar.",
                 "Tarik ke dada atas / atas dada, siku ke bawah.",
@@ -47,11 +63,13 @@ object WorkoutCatalog {
                 "Menarik ke belakang leher (risiko leher/bahu).",
                 "Mengerutkan leher atau menggigit terlalu keras.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Leg press (HG60)",
             suggestedReps = "10",
             info = "Otot: paha depan, glute, sedikit paha belakang. Beban terkontrol untuk kaki kuat tanpa beban penuh di punggung seperti squat berat.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=leg+press+proper+form",
             dos = listOf(
                 "Telapak kaki rata; lutut mengikuti arah jari kaki.",
                 "Turun terkontrol; hentak di bawah yang ringan saja.",
@@ -62,11 +80,13 @@ object WorkoutCatalog {
                 "Angkat pinggul dari sandaran (butt wink berlebihan).",
                 "Plate terlalu berat sampai form hancur.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Seated cable row (low pulley HG60)",
             suggestedReps = "10",
             info = "Otot: punggung tengah, bisep, rear delt ringan. Memperkuat postur dada terbuka & tarikan horizontal.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=seated+cable+row+proper+form",
             dos = listOf(
                 "Dada ringan terbuka; bahu turun (jangan naik ke telinga).",
                 "Tarik ke arah perut bawah / tulang iga bawah.",
@@ -77,11 +97,13 @@ object WorkoutCatalog {
                 "Menarik tinggi ke dada dengan siku terlalu naik.",
                 "Memutar punggung untuk cheat rep.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Incline push-up",
             suggestedReps = "10",
             info = "Otot: dada atas, triceps, core ringan. Variasi lebih ramah sendi daripada push-up lantai penuh.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=incline+push+up+proper+form",
             dos = listOf(
                 "Badan satu garis lutut–pundak (atau badan penuh jika toes).",
                 "Turun dada mendekati permukaan; siku ~45°.",
@@ -100,6 +122,7 @@ object WorkoutCatalog {
             displayName = "Shoulder press (mesin HG60)",
             suggestedReps = "10",
             info = "Otot: deltoid, triceps. Memperkuat angkat di atas kepala & stabilitas bahu (dengan rentang aman & beban progresif).",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=machine+shoulder+press+proper+form",
             dos = listOf(
                 "Sandaran & kursi stabil; core ringan aktif.",
                 "Dorong vertikal nyaman; tidak memaksa di atas kepala jika kaku.",
@@ -110,11 +133,13 @@ object WorkoutCatalog {
                 "Arch punggung besar untuk cheat.",
                 "Melanjutkan jika nyeri tajam di bahu.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Leg curl (leg developer HG60)",
             suggestedReps = "10",
             info = "Otot: hamstring. Melengkapi leg press (depan) agar kaki tidak hanya kuat di bagian depan.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=seated+leg+curl+proper+form",
             dos = listOf(
                 "Bantal di atas pergelangan kaki sesuai unit.",
                 "Gerakkan dari hamstring; jangan lompat pinggul besar.",
@@ -125,11 +150,13 @@ object WorkoutCatalog {
                 "Memaksa beban dengan ayunan kencang.",
                 "Meneruskan jika ada nyeri tajam di lutut.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Triceps pushdown (high pulley HG60)",
             suggestedReps = "12",
             info = "Otot: triceps. Melengkapi gerakan dorong; membantu stabilitas siku & lengan saat dorong.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=triceps+pushdown+proper+form",
             dos = listOf(
                 "Siku tetap dekat sisi tubuh (sedikit ke depan boleh).",
                 "Tekan ke bawah dengan menggerakkan siku, bukan bahu.",
@@ -140,11 +167,13 @@ object WorkoutCatalog {
                 "Membiarkan siku flare lebar tidak terkontrol.",
                 "Memaksa lockout jika siku tidak nyaman.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Romanian deadlift (barbel)",
             suggestedReps = "8",
             info = "Otot: hamstring, glute, punggung bawah (isometrik). Melatih pinggul hinge — penting untuk angkat aman & postur.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=romanian+deadlift+proper+form",
             dos = listOf(
                 "Bar dekat kaki; dorong pinggul belakang, lutut sedikit fleksi.",
                 "Dada ringan ke atas; punggung netral.",
@@ -160,6 +189,7 @@ object WorkoutCatalog {
             displayName = "Biceps curl (biceps pad HG60)",
             suggestedReps = "10",
             info = "Otot: biceps, forearm. Isolasi lengan bawah dengan posisi stabil di pad.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=preacher+curl+proper+form",
             dos = listOf(
                 "Lengan atas tetap di pad; hanya siku yang bergerak.",
                 "Turun terkontrol; jangan jatuhkan beban.",
@@ -170,6 +200,7 @@ object WorkoutCatalog {
                 "Memaksa beban dengan memiringkan tubuh.",
                 "Hyperextension siku di bawah.",
             ),
+            isHg60Station = true,
         ),
     )
 
@@ -178,6 +209,7 @@ object WorkoutCatalog {
             displayName = "Jalan cepat",
             suggestedReps = null,
             info = "Kardio berimpact rendah. Membantu kalori, jantung & kebiasaan bergerak; cocok overweight dengan progresi durasi/intensitas pelan.",
+            tutorialVideoUrl = "https://www.youtube.com/results?search_query=zone+2+walking+cardio+guide",
             dos = listOf(
                 "Postur tegak; langkah ritmis.",
                 "Zona nyaman napas (bisa ngomong kalimat pendek).",
@@ -206,6 +238,7 @@ object WorkoutCatalog {
                 "Ayunan tubuh untuk angkat beban.",
                 "Melanjutkan jika lutut depan nyeri tajam.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Face pull (high pulley HG60)",
@@ -221,6 +254,7 @@ object WorkoutCatalog {
                 "Menarik ke bawah dagu dengan siku rendah.",
                 "Membungkuk besar dari inti tubuh.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Kneeling cable crunch (high pulley HG60)",
@@ -236,6 +270,7 @@ object WorkoutCatalog {
                 "Memaksa pinggul maju mundur besar.",
                 "Leher ditarik dengan tangan.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Standing cable curl (low pulley HG60)",
@@ -251,6 +286,7 @@ object WorkoutCatalog {
                 "Membawa siku maju besar.",
                 "Memutar punggung.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Paloff press (low pulley HG60)",
@@ -266,6 +302,7 @@ object WorkoutCatalog {
                 "Kaki sempit tidak stabil.",
                 "Beban besar sampai tubuh miring.",
             ),
+            isHg60Station = true,
         ),
         CatalogExercise(
             displayName = "Goblet squat (dumbbell)",
@@ -332,13 +369,18 @@ object WorkoutCatalog {
     private val allEntries: List<CatalogExercise> =
         dayA + dayB + cardio + extraHg60AndAccessories
 
+    /** Urutan seed ke tabel Room `exercise_catalog`. */
+    internal fun builtInExercisesOrdered(): List<CatalogExercise> = allEntries
+
     val allNames: List<String> =
         allEntries.map { it.displayName }.distinct().sorted()
 
-    fun suggestionsForQuery(query: String, limit: Int = 12): List<String> {
+    fun suggestionsForQuery(query: String, limit: Int = 12, hg60Only: Boolean = false): List<String> {
+        val pool = if (hg60Only) allEntries.filter { it.isHg60Station } else allEntries
+        val names = pool.map { it.displayName }.distinct().sorted()
         val q = query.trim()
-        if (q.isEmpty()) return allNames.take(limit)
-        return allNames.filter { it.contains(q, ignoreCase = true) }.take(limit)
+        if (q.isEmpty()) return names.take(limit)
+        return names.filter { it.contains(q, ignoreCase = true) }.take(limit)
     }
 
     fun suggestedRepsForName(name: String): String? =
@@ -351,5 +393,55 @@ object WorkoutCatalog {
         val n = name.trim()
         if (n.isEmpty()) return null
         return allEntries.firstOrNull { it.displayName.equals(n, ignoreCase = true) }
+    }
+
+    fun tutorialImageCandidatesForName(name: String): List<String> {
+        val entry = entryForName(name) ?: return emptyList()
+        val explicit = entry.tutorialImageAssetPath?.trim().orEmpty()
+        if (explicit.isNotEmpty()) return listOf(explicit)
+        val slug = slugifyExerciseName(entry.displayName)
+        if (slug.isEmpty()) return emptyList()
+        return listOf(
+            "image/tutorial/$slug.png",
+            "image/tutorial/$slug.jpg",
+            "image/tutorial/$slug.webp",
+        )
+    }
+
+    fun tutorialCoverageChecklist(): List<TutorialCoverageItem> {
+        return allEntries.distinctBy { it.displayName.lowercase() }.map { ex ->
+            TutorialCoverageItem(
+                exerciseName = ex.displayName,
+                expectedImageAssets = tutorialImageCandidatesForName(ex.displayName),
+                expectedVideoAssets = tutorialVideoCandidatesForName(ex.displayName),
+                hasVideoFallback = !ex.tutorialVideoUrl.isNullOrBlank(),
+            )
+        }.sortedBy { it.exerciseName.lowercase() }
+    }
+
+    fun tutorialVideoCandidatesForName(name: String): List<String> {
+        val entry = entryForName(name) ?: return emptyList()
+        val explicit = entry.tutorialVideoAssetPath?.trim().orEmpty()
+        if (explicit.isNotEmpty()) return listOf(explicit)
+        val slug = slugifyExerciseName(entry.displayName)
+        if (slug.isEmpty()) return emptyList()
+        return listOf(
+            "video/tutorial/$slug.mp4",
+            "video/tutorial/$slug.webm",
+            "video/tutorial/$slug.gif",
+        )
+    }
+
+    private fun slugifyExerciseName(name: String): String {
+        val cleaned = buildString {
+            name.lowercase().forEach { c ->
+                when {
+                    c.isLetterOrDigit() -> append(c)
+                    c == ' ' || c == '-' || c == '_' -> append('_')
+                    else -> {}
+                }
+            }
+        }
+        return cleaned.replace(Regex("_+"), "_").trim('_')
     }
 }

@@ -1,0 +1,41 @@
+Tutorial media checklist (offline-first)
+=======================================
+
+Tempatkan file tutorial per latihan di folder ini:
+- app/src/main/assets/image/tutorial/
+
+Format nama file:
+- pakai slug lowercase + underscore
+- ekstensi yang didukung: .png, .jpg, .webp
+
+Contoh:
+- chest_press_mesin_hg60.png
+- lat_pulldown_high_pulley_hg60.jpg
+
+Daftar latihan prioritas:
+- chest_press_mesin_hg60
+- lat_pulldown_high_pulley_hg60
+- leg_press_hg60
+- seated_cable_row_low_pulley_hg60
+- incline_push_up
+- shoulder_press_mesin_hg60
+- leg_curl_leg_developer_hg60
+- triceps_pushdown_high_pulley_hg60
+- romanian_deadlift_barbel
+- biceps_curl_biceps_pad_hg60
+- jalan_cepat
+
+Daftar latihan tambahan:
+- leg_extension_leg_developer_hg60
+- face_pull_high_pulley_hg60
+- kneeling_cable_crunch_high_pulley_hg60
+- standing_cable_curl_low_pulley_hg60
+- paloff_press_low_pulley_hg60
+- goblet_squat_dumbbell
+- split_squat_dibantu
+- plank_detik_di_kolom_reps
+- dead_bug
+
+Catatan:
+- Jika file lokal tidak ada, app akan fallback ke link video online (jika tersedia).
+- Untuk mode offline penuh, lengkapi semua file di atas.

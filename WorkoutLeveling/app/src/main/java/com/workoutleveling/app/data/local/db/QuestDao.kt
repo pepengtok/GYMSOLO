@@ -11,6 +11,15 @@ interface QuestDao {
     @Query("SELECT * FROM quests WHERE periodKey = :day ORDER BY questType ASC")
     fun observeForDay(day: String): Flow<List<QuestEntity>>
 
+    @Query(
+        """
+        SELECT * FROM quests
+        WHERE periodKey = :day OR periodKey = :weekKey
+        ORDER BY questType ASC, id ASC
+        """,
+    )
+    fun observeForDayAndWeek(day: String, weekKey: String): Flow<List<QuestEntity>>
+
     @Query("SELECT * FROM quests WHERE id = :id")
     suspend fun getById(id: String): QuestEntity?
 

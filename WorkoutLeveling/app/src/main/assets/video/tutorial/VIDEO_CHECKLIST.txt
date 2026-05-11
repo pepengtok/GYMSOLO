@@ -1,0 +1,32 @@
+Offline tutorial video checklist
+===============================
+
+Put your local tutorial videos here:
+- app/src/main/assets/video/tutorial/
+
+Supported formats:
+- .mp4 (recommended)
+- .webm
+- .gif (supported as animated fallback)
+
+Filename pattern follows exercise slug:
+- chest_press_mesin_hg60.mp4
+- lat_pulldown_high_pulley_hg60.mp4
+- leg_press_hg60.mp4
+- seated_cable_row_low_pulley_hg60.mp4
+- incline_push_up.mp4
+- shoulder_press_mesin_hg60.mp4
+- leg_curl_leg_developer_hg60.mp4
+- triceps_pushdown_high_pulley_hg60.mp4
+- romanian_deadlift_barbel.mp4
+- biceps_curl_biceps_pad_hg60.mp4
+- jalan_cepat.mp4
+- leg_extension_leg_developer_hg60.mp4
+- face_pull_high_pulley_hg60.mp4
+- kneeling_cable_crunch_high_pulley_hg60.mp4
+- standing_cable_curl_low_pulley_hg60.mp4
+- paloff_press_low_pulley_hg60.mp4
+- goblet_squat_dumbbell.mp4
+- split_squat_dibantu.mp4
+- plank_detik_di_kolom_reps.mp4
+- dead_bug.mp4

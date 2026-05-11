@@ -1,0 +1,18 @@
+Tutorial image source
+=====================
+
+Source repository:
+- https://github.com/yuhonas/free-exercise-db
+
+Raw image base:
+- https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/
+
+Dataset note:
+- Repository states data license as Unlicense (public domain).
+- Image provenance in upstream community discussions may vary; use at your own risk.
+
+Downloaded for personal/non-commercial use in this local project.
+
+Additional tutorial animations source:
+- https://github.com/hasaneyldrm/exercises-dataset
+- Media used from `videos/*.gif` paths (educational / non-commercial note in upstream README).

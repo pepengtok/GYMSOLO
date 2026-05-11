@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.workoutleveling.app.WorkoutLevelingApp
-import com.workoutleveling.app.domain.progress.DailyQuestTemplates
+import com.workoutleveling.app.domain.progress.PlayerRankSync
 import com.workoutleveling.app.domain.progress.ProgressRules
+import com.workoutleveling.app.domain.progress.QuestBootstrap
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +37,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            ensureTodayDailyQuest()
+            QuestBootstrap.ensureTodayAndWeek(questDao)
+            PlayerRankSync.refreshRankFromHistory(dao, playerDao)
         }
     }
 
@@ -49,9 +50,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         .map { sessions ->
             sessions.take(5).map { session ->
                 val whenText = dateFmt.format(Date(session.startedAtEpochMs))
+                val rpePart = session.effortRpe?.let { " · RPE $it" }.orEmpty()
                 SessionHistoryItem(
                     title = "Gate ${session.type}",
-                    subtitle = "Mulai $whenText",
+                    subtitle = "Mulai $whenText$rpePart",
                 )
             }
         }
@@ -76,11 +78,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val baselineDone: StateFlow<Boolean> = app.userPreferences.baselineDone
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
-    private suspend fun ensureTodayDailyQuest() {
-        val day = LocalDate.now()
-        val id = DailyQuestTemplates.todaySessionQuestId(day)
-        if (questDao.getById(id) == null) {
-            questDao.upsert(DailyQuestTemplates.todaySessionQuest(day))
-        }
+    val homeTipsDismissed: StateFlow<Boolean> = app.userPreferences.isHomeTipsDismissed
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    fun dismissHomeTips() {
+        viewModelScope.launch { app.userPreferences.setHomeTipsDismissed(true) }
     }
 }

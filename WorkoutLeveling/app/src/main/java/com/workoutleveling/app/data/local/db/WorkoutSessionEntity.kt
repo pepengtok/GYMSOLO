@@ -12,4 +12,6 @@ data class WorkoutSessionEntity(
     val type: String,
     val notes: String? = null,
     val effortRpe: Int? = null,
+    /** Centang saat simpan jika sesi termasuk mobility / cooldown ringan (+XP). */
+    val includedRecoveryMobility: Boolean = false,
 )

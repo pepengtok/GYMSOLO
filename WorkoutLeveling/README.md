@@ -12,9 +12,13 @@ APK pribadi (sideload), offline-first — lihat rencana di `../ROADMAP_SOLO_FITN
 
 - Jetpack Compose + Material 3 + tema gelap (gate).
 - Navigation: Home → Session, Home → Progress, Home → Baseline (opsional).
-- Room v2: sesi + set, **`player_state`** (XP, streak, rank), **`quests`** (harian), **`body_metrics`** (baseline); migrasi `1 → 2`.
+- Room v5: tabel `exercise_catalog` + `pain_reports`; migrasi `1 → 2 → 3 → 4 → 5`.
 - XP sesi: 50 + menit latihan (maks 45) + bonus streak (≥3 hari), level tiap 300 XP (lihat `ProgressRules`).
 - Quest harian otomatis: “Selesaikan 1 sesi hari ini”.
+- Quest mingguan (3× sesi), grafik 14 hari di Progress (jumlah sesi + volume rep×kg + menit cardio), readiness check (tidur/energi/pegal), saran progression otomatis, flag nyeri tajam per gerakan (warning jika berulang), **katalog custom** (tambah/edit/hapus + filter HG60), **bonus XP mobility/cooldown** (checkbox saat simpan), **rank** dari ringkasan rolling ~4 minggu (bukan hanya level), check-in tubuh berkala + cut trend ringkas, backup DB (ekspor + impor tervalidasi + **safety backup otomatis sebelum impor**), Health Connect, pengingat Senin (WorkManager).
+- UX kecil: kartu tips pertama di Home (bisa dismiss), plus unit test dasar untuk `ProgressRules` dan validator header backup.
+- Android 13+: izin **notifikasi** diminta **sekali** saat pertama buka (opsional; pengingat tetap dijadwalkan).
+- **compileSdk 36** (syarat `androidx.health.connect:connect-client`); `targetSdk` tetap 35.
 - DataStore: `UserPreferences` (flag baseline selesai / dilewati).
 
 ### Gradle / JDK

@@ -1,0 +1,17 @@
+Coach sound effects source
+==========================
+
+Source repository:
+- https://github.com/Calinou/kenney-ui-audio
+
+Original author:
+- Kenney (https://kenney.nl/assets/ui-audio)
+
+License:
+- CC0 1.0 Universal (public domain dedication)
+
+Files used (copied into `res/raw/`):
+- coach_ready_beep.wav (from switch3.wav)
+- coach_set_finish.wav (from switch14.wav)
+- coach_rest_end.wav (from switch7.wav)
+- coach_tap.wav (from click2.wav)
