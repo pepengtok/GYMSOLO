@@ -514,7 +514,6 @@ fun SessionScreen(
                                 viewModel.updateSet(currentIdx) { old -> old.copy(sharpPain = v) }
                             },
                             showAdvanced = false,
-                            immersiveMode = immersiveActiveMode,
                             onRemove = {},
                             modifier = Modifier.padding(top = 10.dp),
                         )
@@ -768,7 +767,6 @@ private fun ExerciseSetCard(
     onDurationChange: (String) -> Unit,
     onSharpPainChange: (Boolean) -> Unit,
     showAdvanced: Boolean,
-    immersiveMode: Boolean,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -843,48 +841,46 @@ private fun ExerciseSetCard(
                 }
             }
 
-            if (!immersiveMode) {
-                localTutorialImagePath?.let { tutorialImage ->
-                    AssetImage(
-                        assetPath = tutorialImage,
-                        contentDescription = "Contoh gerakan ${set.exerciseName}",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        contentScale = ContentScale.FillWidth,
-                    )
+            localTutorialImagePath?.let { tutorialImage ->
+                AssetImage(
+                    assetPath = tutorialImage,
+                    contentDescription = "Contoh gerakan ${set.exerciseName}",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    contentScale = ContentScale.FillWidth,
+                )
+            }
+            localTutorialVideoPath?.let { tutorialVideo ->
+                Button(
+                    onClick = { showTutorialDialog = true },
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .heightIn(min = 44.dp),
+                ) {
+                    Text("Putar video tutorial offline")
                 }
-                localTutorialVideoPath?.let { tutorialVideo ->
-                    Button(
-                        onClick = { showTutorialDialog = true },
-                        modifier = Modifier
-                            .padding(top = 6.dp)
-                            .heightIn(min = 44.dp),
-                    ) {
-                        Text("Putar video tutorial offline")
-                    }
-                }
-                if (localTutorialImagePath == null && localTutorialVideoPath == null) {
-                    Text(
-                        "Tutorial offline belum tersedia untuk latihan ini.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.68f),
-                        modifier = Modifier.padding(top = 6.dp),
-                    )
-                }
-                if (localTutorialImagePath == null && localTutorialVideoPath == null) entry?.tutorialVideoUrl?.let { tutorialUrl ->
-                    OutlinedButton(
-                        onClick = {
-                            runCatching {
-                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(tutorialUrl)))
-                            }
-                        },
-                        modifier = Modifier
-                            .padding(top = 6.dp)
-                            .heightIn(min = 44.dp),
-                    ) {
-                        Text("Lihat video tutorial form")
-                    }
+            }
+            if (localTutorialImagePath == null && localTutorialVideoPath == null) {
+                Text(
+                    "Tutorial offline belum tersedia untuk latihan ini.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.68f),
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+            }
+            if (localTutorialImagePath == null && localTutorialVideoPath == null) entry?.tutorialVideoUrl?.let { tutorialUrl ->
+                OutlinedButton(
+                    onClick = {
+                        runCatching {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(tutorialUrl)))
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .heightIn(min = 44.dp),
+                ) {
+                    Text("Lihat video tutorial form")
                 }
             }
 
@@ -1149,20 +1145,46 @@ private fun CoachPhaseHero(
     }
 }
 
+/** Hanya path aset bawaan tutorial; cegah injeksi HTML / traversal jika path pernah jadi eksplisit dari data. */
+private fun isBundledTutorialMediaAssetPath(path: String): Boolean {
+    val p = path.trim().trimStart('/')
+    if (p.isEmpty() || p.contains("..")) return false
+    return p.startsWith("video/tutorial/") || p.startsWith("image/tutorial/")
+}
+
+private fun encodeAssetPathForAndroidAssetUrl(path: String): String =
+    path.trim().trimStart('/').split('/').filter { it.isNotEmpty() }.joinToString("/") { Uri.encode(it) }
+
 @Composable
 private fun InAppTutorialViewer(assetPath: String) {
-    val escapedPath = assetPath.replace("\"", "%22")
-    val html = if (assetPath.lowercase().endsWith(".gif")) {
+    if (!isBundledTutorialMediaAssetPath(assetPath)) {
+        Text(
+            "Media tutorial tidak valid.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error,
+        )
+        return
+    }
+    val encodedPath = encodeAssetPathForAndroidAssetUrl(assetPath)
+    val lower = assetPath.lowercase()
+    val html = if (lower.endsWith(".gif")) {
         """
-        <html><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;">
-          <img src="file:///android_asset/$escapedPath" style="max-width:100%;max-height:100%;" />
+        <html><head><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+        <body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;">
+          <img src="file:///android_asset/$encodedPath" style="max-width:100%;max-height:100%;" />
         </body></html>
         """.trimIndent()
     } else {
+        val mime = when {
+            lower.endsWith(".webm") -> "video/webm"
+            lower.endsWith(".mp4") -> "video/mp4"
+            else -> "video/mp4"
+        }
         """
-        <html><body style="margin:0;background:#111;">
+        <html><head><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+        <body style="margin:0;background:#111;">
           <video controls autoplay loop playsinline style="width:100%;height:100%;">
-            <source src="file:///android_asset/$escapedPath" type="video/mp4"/>
+            <source src="file:///android_asset/$encodedPath" type="$mime"/>
           </video>
         </body></html>
         """.trimIndent()
@@ -1172,10 +1194,18 @@ private fun InAppTutorialViewer(assetPath: String) {
             WebView(ctx).apply {
                 webViewClient = WebViewClient()
                 settings.javaScriptEnabled = false
+                settings.allowContentAccess = false
+                settings.allowFileAccess = true
             }
         },
         update = { web ->
             web.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "utf-8", null)
+        },
+        onRelease = { web ->
+            web.stopLoading()
+            web.loadUrl("about:blank")
+            web.removeAllViews()
+            web.destroy()
         },
         modifier = Modifier
             .fillMaxWidth()
